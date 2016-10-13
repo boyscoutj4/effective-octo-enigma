@@ -22,9 +22,8 @@ else:
   if opt.a is True:
     wsite = raw_input("Type website you want to ADD to /etc/hosts: ")
     print("Resolving for %s" %(wsite))
-    edgekey = os.system('dig %s | grep -h edgekey | awk \'{print $5}\' | grep -v akamaiedge' %(wsite)) #This does the resolution of the site provided by user in previous command.
+    edgekey = os.system('dig %s +short | grep edgekey | sed \'s/edgekey/edgekey-staging/\' | xargs dig +short | grep -Eo \'[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\'' %(wsite)) #This does the resolution of the site provided by user in previous command.
     
-#Getting staging IP from the edgekey.net site and puts into a variable.
 
 
 
