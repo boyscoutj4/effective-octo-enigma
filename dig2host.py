@@ -5,15 +5,27 @@
 #Author: Julio Betanco
 
 
-import socket, sys, re, getpass, datetime, os
+import socket, sys, re, getpass, datetime, os, optparse, pexpect
 
-#Asking for www site to add to your /etc/hosts file and puts into a variable.
-wsite = raw_input("Type website you want to add to /etc/hosts: ")
-print("Resolving for %s" %(wsite))
+#Adding options to add/delete staging IP from host file
+theparser = optparse.OptionParser()
+myparser.add_option('-a', '--add', action='store', help='Use this option if you want to ADD staging IP to hosts file', dest='a')
+myparser.add_option('-d', '--delete', action='store_true', help='Use this option if you want to DELETE staging IP from hosts file', dest='d')
+(opt, args) = theparser.parse_args()
 
-#This does the resolution of the site provided by user in previous command.
-edgekey = os.system('dig %s | grep -h edgekey | awk \'{print $5}\' | grep -v akamaiedge' %(wsite))
-
+#Not allowing to choose both options add and delete.
+if opt.d is True and opt.a is True:
+	print "Please choose either -a or -d not both!"
+	exit()
+#Each option getting assigned task.  
+else:
+  if opt.a is True:
+    wsite = raw_input("Type website you want to ADD to /etc/hosts: ")
+    print("Resolving for %s" %(wsite))
+    edgekey = os.system('dig %s | grep -h edgekey | awk \'{print $5}\' | grep -v akamaiedge' %(wsite)) #This does the resolution of the site provided by user in previous command.
+    
 #Getting staging IP from the edgekey.net site and puts into a variable.
+
+
 
 
