@@ -9,18 +9,14 @@ import os, argparse, sys, re, commands, fileinput, datetime
 
 
 #Setting arguments to either add or delete staging IPs to local host file.
-parser = argparse.ArgumentParser()
-parser.add_argument("-a", "--add", help="Use this option if you want to ADD staging IP to hosts file")
-parser.add_argument("-d", "--delete", help="Use this option if you want to DELETE staging IP to hosts file")
-args = parser.parse_args()
+parser.add_argument("-a", "--add", help="Use this option if you want to ADD staging IP to hosts file") #Created the "add" argument, requires a user input in order to run the program. Using the "-a" flag with the program will delete domain from host.
+parser.add_argument("-d", "--delete", help="Use this option if you want to DELETE staging IP to hosts file") #Created the "delete" argument, requires a user input in order to run the program. Using the "-d" flag with the program will delete domain from host.
 
 #If you choose the add argument then it will add the staging IP to host file.
-if args.add:
-	if (args.add) in open('/etc/hosts').read():
+	if (args.add) in open('/etc/hosts').read(): # If the users argument is in '/etc/hosts' the print the line below.  
 		print("%s ALREADY exists in hosts file" %(args.add))
-	else:
-		stagingip = commands.getoutput('dig %s +short | grep edgekey | sed \'s/edgekey/edgekey-staging/\' | xargs dig +short | grep -Eo \'[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\'' %(args.add))
 		if (stagingip) == "":
+	else: 
 			print("%s is NOT Akamaized!!" %(args.add))
 		else:
 			openfile = open('/etc/hosts', 'a')
